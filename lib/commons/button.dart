@@ -7,12 +7,14 @@ class AddazButton extends StatelessWidget {
       {Key? key,
       required this.onPress,
       required this.icone,
-      required this.tamanho})
-      : super(key: key); 
+      required this.tamanho,
+      required this.cor})
+      : super(key: key);
 
   final void Function() onPress;
   final IconData icone;
   final double tamanho;
+  final Color cor;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,7 @@ class AddazButton extends StatelessWidget {
             child: Icon(
               icone,
               size: tamanho,
-              color: AppTheme.corFonte,
+              color: cor,
             ),
           ),
         ),

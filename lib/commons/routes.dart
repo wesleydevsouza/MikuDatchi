@@ -3,16 +3,24 @@
 import 'package:flutter/material.dart';
 import 'package:water_reminder/screens/lobby.dart';
 
+import '../screens/status.dart';
+
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/lobby':
         return MaterialPageRoute(
-          builder: (context) => Lobby(),
+          builder: (context) => Lobby(10, 10, 10, 10),
+        );
+
+      case '/status':
+        return MaterialPageRoute(
+          builder: (context) =>
+              StatusScreen(drink: 10, eat: 10, sing: 10, sleep: 10),
         );
 
       default:
-        return MaterialPageRoute(builder: (context) => Lobby());
+        return MaterialPageRoute(builder: (context) => Lobby(10, 10, 10, 10));
     }
   }
 }

@@ -2,19 +2,69 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:water_reminder/commons/button.dart';
 import 'package:water_reminder/constants/styling.dart';
+import 'package:water_reminder/screens/status.dart';
 
 class Lobby extends StatefulWidget {
-  const Lobby({Key? key}) : super(key: key);
+  //Var
+  int drink;
+  int eat;
+  int sleep;
+  int sing;
+
+  Lobby(this.drink, this.eat, this.sleep, this.sing);
 
   @override
   _LobbyState createState() => _LobbyState();
 }
 
 class _LobbyState extends State<Lobby> {
+  int _drink = 10;
+  int _eat = 10;
+  int _sleep = 10;
+  int _sing = 10;
+
+  void _incrementDrink() {
+    setState(() {
+      _drink++;
+    });
+  }
+
+  void _incrementEat() {
+    setState(() {
+      _eat++;
+    });
+  }
+
+  void _incrementSing() {
+    setState(() {
+      _sing++;
+    });
+  }
+
+  void _incrementSleep() {
+    setState(() {
+      _sleep++;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+  }
+
+  void _goToScreenTwo() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => StatusScreen(
+                eat: _eat,
+                drink: _drink,
+                sing: _sing,
+                sleep: _sleep,
+              )),
+    );
   }
 
   @override
@@ -89,6 +139,48 @@ class _LobbyState extends State<Lobby> {
                   ),
                 ],
               ),
+              SizedBox(
+                height: 50,
+              ),
+              Stack(
+                children: <Widget>[
+                  Container(
+                    width: double.infinity,
+                    //borderRadius: BorderRadius.circular(1000),
+                    child: Image.asset('images/scene.png', scale: 2),
+                  ),
+                  Container(
+                    //borderRadius: BorderRadius.circular(1000),
+                    child: Image.asset('images/char.png'),
+                  ),
+                  // ClipRRect(
+                  //   borderRadius: BorderRadius.circular(1000),
+                  //   child: Image.asset('images/placeholder.jpg', scale: 2),
+                  // ),
+                ],
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              Row(
+                children: [
+                  AddazButton(
+                      onPress: () {},
+                      icone: Icons.fastfood,
+                      tamanho: 60,
+                      cor: Colors.blueAccent),
+                  AddazButton(
+                      onPress: () {},
+                      icone: Icons.emoji_food_beverage,
+                      tamanho: 60,
+                      cor: Colors.blueAccent),
+                  AddazButton(
+                      onPress: () {},
+                      icone: Icons.mic,
+                      tamanho: 60,
+                      cor: Colors.blueAccent),
+                ],
+              )
             ],
           ),
         ),
