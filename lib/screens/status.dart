@@ -86,7 +86,7 @@ class _StatusScreenState extends State<StatusScreen> {
                 width: double.infinity,
                 height: 50,
                 child: LinearProgressIndicator(
-                  value: progressValue / 10, // Calcula o valor do progresso
+                  value: progressValue / 10, // Calcula o valor 3do progresso
                   backgroundColor: Colors.grey[300], // Cor de fundo da barra
                   valueColor: AlwaysStoppedAnimation<Color>(
                       Colors.purple), // Cor da barra de progresso

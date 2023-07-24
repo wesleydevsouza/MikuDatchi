@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:water_reminder/commons/button.dart';
+import 'package:water_reminder/components/HorizontalBar.dart';
 import 'package:water_reminder/constants/styling.dart';
+import 'package:water_reminder/functions/DataController.dart';
 import 'package:water_reminder/screens/status.dart';
 
 class Lobby extends StatefulWidget {
@@ -20,6 +22,8 @@ class Lobby extends StatefulWidget {
 }
 
 class _LobbyState extends State<Lobby> {
+  DataController dataController = DataController();
+
   int _drink = 10;
   int _eat = 10;
   int _sleep = 10;
@@ -58,12 +62,13 @@ class _LobbyState extends State<Lobby> {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => StatusScreen(
-                eat: _eat,
-                drink: _drink,
-                sing: _sing,
-                sleep: _sleep,
-              )),
+        builder: (context) => StatusScreen(
+          eat: _eat,
+          drink: _drink,
+          sing: _sing,
+          sleep: _sleep,
+        ),
+      ),
     );
   }
 
@@ -114,7 +119,7 @@ class _LobbyState extends State<Lobby> {
                       children: <TextSpan>[
                         TextSpan(text: 'Miku'),
                         TextSpan(
-                            text: 'Datchi',
+                            text: 'Dachi',
                             style: TextStyle(color: AppTheme.corLogo2)),
                       ],
                     ),
@@ -124,8 +129,8 @@ class _LobbyState extends State<Lobby> {
                     height: 60,
                     child: InkWell(
                       onTap: () {
-                        print("funfou");
-                      }, //hides the player view
+                        _goToScreenTwo;
+                      },
                       child: Container(
                         padding: const EdgeInsets.all(10.0),
                         decoration: const BoxDecoration(shape: BoxShape.circle),
@@ -162,23 +167,44 @@ class _LobbyState extends State<Lobby> {
               SizedBox(
                 height: 50,
               ),
-              Row(
+              Column(
                 children: [
-                  AddazButton(
-                      onPress: () {},
-                      icone: Icons.fastfood,
-                      tamanho: 60,
-                      cor: Colors.blueAccent),
-                  AddazButton(
-                      onPress: () {},
-                      icone: Icons.emoji_food_beverage,
-                      tamanho: 60,
-                      cor: Colors.blueAccent),
-                  AddazButton(
-                      onPress: () {},
-                      icone: Icons.mic,
-                      tamanho: 60,
-                      cor: Colors.blueAccent),
+                  Row(
+                    children: [
+                      AddazButton(
+                          onPress: () {
+                            setState(() {
+                              print('Valor: ${dataController.food}');
+                              dataController.food = dataController.IncrementSts(
+                                  dataController.food);
+                              print('bangas bundas');
+                              print('Valor: ${dataController.food}');
+                            });
+                          },
+                          icone: Icons.fastfood,
+                          tamanho: 60,
+                          cor: Colors.blueAccent),
+                      AddazButton(
+                          onPress: () {},
+                          icone: Icons.emoji_food_beverage,
+                          tamanho: 60,
+                          cor: Colors.blueAccent),
+                      AddazButton(
+                          onPress: () {},
+                          icone: Icons.mic,
+                          tamanho: 60,
+                          cor: Colors.blueAccent),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      SizedBox(height: 20),
+                    ],
+                  ),
+                  Text('Food: ${dataController.food}'),
+                  HorizontalBar(value: dataController.food),
+
+                  // Text('Drink: ${dataController.drink}'),
+                  // Text('Fun: ${dataController.fun}'),
                 ],
               )
             ],
