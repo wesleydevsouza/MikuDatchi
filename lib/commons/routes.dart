@@ -10,7 +10,7 @@ class RouteGenerator {
     switch (settings.name) {
       case '/lobby':
         return MaterialPageRoute(
-          builder: (context) => Lobby(10, 10, 10, 10),
+          builder: (context) => Lobby(),
         );
 
       case '/status':
@@ -20,7 +20,7 @@ class RouteGenerator {
         );
 
       default:
-        return MaterialPageRoute(builder: (context) => Lobby(10, 10, 10, 10));
+        return MaterialPageRoute(builder: (context) => Lobby());
     }
   }
 }
