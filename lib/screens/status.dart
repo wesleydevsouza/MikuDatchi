@@ -1,23 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
-import 'package:water_reminder/constants/styling.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:miku_datchi/components/HorizontalBar.dart';
+import 'package:miku_datchi/constants/styling.dart';
+import 'package:miku_datchi/functions/DataController.dart';
+import 'package:miku_datchi/functions/functions.dart';
+import 'package:timer_builder/timer_builder.dart';
 
 class StatusScreen extends StatefulWidget {
-  const StatusScreen(
-      {Key? key,
-      required this.drink,
-      required this.eat,
-      required this.sleep,
-      required this.sing})
-      : super(key: key);
-
-  //Var
-  final int drink;
-  final int eat;
-  final int sleep;
-  final int sing;
-
   @override
   _StatusScreenState createState() => _StatusScreenState();
 }
@@ -28,101 +20,143 @@ class _StatusScreenState extends State<StatusScreen> {
     super.initState();
   }
 
-  int progressValue = 1; // Defina o valor de progresso aqui
-
-  void increaseProgress() {
-    setState(() {
-      if (progressValue != 10) {
-        // Verifica se o valor não é igual a 10
-        progressValue++; // Incrementa o valor da variável
-      }
-    });
-  }
-
-  void decreaseProgress() {
-    setState(() {
-      if (progressValue != 1) {
-        // Verifica se o valor não é igual a 1
-        progressValue--; // Decrementa o valor da variável
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.corScaffold,
-      body: SafeArea(
-        minimum: EdgeInsets.fromLTRB(10, 32, 10, 10),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: double.infinity,
-                height: 50,
-                child: LinearProgressIndicator(
-                  value: progressValue / 10, // Calcula o valor do progresso
-                  backgroundColor: Colors.grey[300], // Cor de fundo da barra
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      Colors.orange), // Cor da barra de progresso
-                ),
-              ),
-              SizedBox(height: 20),
-              Container(
-                width: double.infinity,
-                height: 50,
-                child: LinearProgressIndicator(
-                  value: progressValue / 10, // Calcula o valor do progresso
-                  backgroundColor: Colors.grey[300], // Cor de fundo da barra
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      Colors.blue), // Cor da barra de progresso
-                ),
-              ),
-              SizedBox(height: 20),
-              Container(
-                width: double.infinity,
-                height: 50,
-                child: LinearProgressIndicator(
-                  value: progressValue / 10, // Calcula o valor 3do progresso
-                  backgroundColor: Colors.grey[300], // Cor de fundo da barra
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      Colors.purple), // Cor da barra de progresso
-                ),
-              ),
-              SizedBox(height: 20),
-              Container(
-                width: double.infinity,
-                height: 50,
-                child: LinearProgressIndicator(
-                  value: progressValue / 10, // Calcula o valor do progresso
-                  backgroundColor: Colors.grey[300], // Cor de fundo da barra
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      Colors.yellow), // Cor da barra de progresso
-                ),
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      increaseProgress(); // Chama a função de incremento
-                    },
-                    child: Icon(Icons.add),
+      body: TimerBuilder.periodic(
+        Duration(seconds: 1),
+        builder: (context) {
+          Functions func = Functions();
+          int randomSeconds = func.getRandomSeconds();
+
+          final restartableTimer = RestartableTimer(
+            Duration(seconds: randomSeconds),
+            () {
+              print("Próxima atualização em $randomSeconds segundos");
+              Future.delayed(
+                  Duration(seconds: randomSeconds),
+                  () => setState(() {
+                        func.getRandomStatus();
+                      }));
+            },
+          );
+          restartableTimer.reset();
+
+          return SafeArea(
+            minimum: EdgeInsets.fromLTRB(10, 32, 10, 10),
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RichText(
+                  textAlign: TextAlign.center,
+                  textDirection: TextDirection.ltr,
+                  text: TextSpan(
+                    style: GoogleFonts.righteous(
+                        fontSize: 45, color: AppTheme.corLogo),
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: <TextSpan>[
+                      TextSpan(text: 'Miku'),
+                      TextSpan(
+                          text: 'Status',
+                          style: TextStyle(color: AppTheme.corLogo2)),
+                    ],
                   ),
-                  SizedBox(width: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      decreaseProgress(); // Chama a função de decremento
-                    },
-                    child: Icon(Icons.remove),
+                ),
+                SizedBox(
+                  height: 150,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, bottom: 8, top: 30),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Fome: ${DataController.dataController.food}',
+                      style: GoogleFonts.roboto(
+                          fontSize: 25,
+                          color: AppTheme.bgfome,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ],
-              ),
-            ],
-          ),
-        ),
+                ),
+                HorizontalBar(
+                  value: DataController.dataController.food,
+                  cor: AppTheme.fome,
+                  corBG: AppTheme.bgfome,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, bottom: 8, top: 30),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Sede: ${DataController.dataController.drink}',
+                      style: GoogleFonts.roboto(
+                          fontSize: 25,
+                          color: AppTheme.bgDrink,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                HorizontalBar(
+                  value: DataController.dataController.drink,
+                  cor: AppTheme.drink,
+                  corBG: AppTheme.bgDrink,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, bottom: 8, top: 30),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Diversão: ${DataController.dataController.fun}',
+                      style: GoogleFonts.roboto(
+                          fontSize: 25,
+                          color: AppTheme.corCirculo,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                HorizontalBar(
+                  value: DataController.dataController.fun,
+                  cor: AppTheme.corCirculo,
+                  corBG: AppTheme.corProgresso,
+                ),
+                SizedBox(
+                  height: 80,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Voltar',
+                    style: GoogleFonts.roboto(
+                        fontSize: 25,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(10.0),
+                      decoration: const BoxDecoration(shape: BoxShape.circle),
+                      child: const Icon(
+                        Icons.gamepad,
+                        color: AppTheme.corCirculo,
+                        size: 40,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

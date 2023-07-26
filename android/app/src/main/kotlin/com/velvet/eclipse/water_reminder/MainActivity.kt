@@ -1,4 +1,4 @@
-package com.velvet.eclipse.water_reminder
+package com.velvet.eclipse.miku_datchi
 
 import io.flutter.embedding.android.FlutterActivity
 

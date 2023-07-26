@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.velvet.eclipse.water_reminder">
+    package="com.velvet.eclipse.miku_datchi">
    <application
-        android:label="Miku Water"
+        android:label="Miku Dachi"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

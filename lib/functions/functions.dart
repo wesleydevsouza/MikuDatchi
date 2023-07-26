@@ -1,18 +1,13 @@
 import 'dart:math';
 
-import 'package:water_reminder/functions/DataController.dart';
+import 'package:miku_datchi/functions/DataController.dart';
 
 class Functions {
-  final DataController dataController;
   late int sts;
-
-  Functions(
-    this.dataController,
-  );
 
   int getRandomSeconds() {
     Random random = Random();
-    return random.nextInt(1);
+    return random.nextInt(30);
   }
 
   void decayValue(atributo) {
@@ -23,31 +18,28 @@ class Functions {
 
   void getRandomStatus() {
     Random dan = Random();
-    sts = dan.nextInt(3);
+    sts = dan.nextInt(60);
 
     switch (sts) {
       case 0:
-        if (dataController.food > 1) {
-          --dataController!.food;
+        if (DataController.dataController.food > 1) {
+          --DataController.dataController!.food;
         }
         return;
 
       case 1:
-        if (dataController.drink > 1) {
-          --dataController!.drink;
+        if (DataController.dataController.drink > 1) {
+          --DataController.dataController!.drink;
         }
         return;
 
       case 2:
-        if (dataController.fun > 1) {
-          --dataController!.fun;
+        if (DataController.dataController.fun > 1) {
+          --DataController.dataController!.fun;
         }
         return;
 
       default:
-        if (dataController.fun > 1) {
-          --dataController!.fun;
-        }
         return;
     }
   }

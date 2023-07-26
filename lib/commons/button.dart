@@ -8,6 +8,7 @@ class AddazButton extends StatelessWidget {
       required this.onPress,
       required this.icone,
       required this.tamanho,
+      required this.bgCor,
       required this.cor})
       : super(key: key);
 
@@ -15,6 +16,7 @@ class AddazButton extends StatelessWidget {
   final IconData icone;
   final double tamanho;
   final Color cor;
+  final Color bgCor;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,8 @@ class AddazButton extends StatelessWidget {
         shape: const CircleBorder(),
       ),
       child: Ink(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
+          color: bgCor,
           shape: BoxShape.circle,
         ),
         child: InkWell(

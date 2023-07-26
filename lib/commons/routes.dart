@@ -1,7 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:water_reminder/screens/lobby.dart';
+import 'package:miku_datchi/functions/DataController.dart';
+import 'package:miku_datchi/screens/lobby.dart';
 
 import '../screens/status.dart';
 
@@ -15,8 +16,7 @@ class RouteGenerator {
 
       case '/status':
         return MaterialPageRoute(
-          builder: (context) =>
-              StatusScreen(drink: 10, eat: 10, sing: 10, sleep: 10),
+          builder: (context) => StatusScreen(),
         );
 
       default:

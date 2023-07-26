@@ -18,6 +18,15 @@ class AppTheme {
   static const Color GradientCardShadow = Color(0xffbf2aa2);
   static const Color bgColor = Color(0xFF110a29);
 
+  static const Color fome = Color(0xFFFFBC4A);
+  static const Color bgfome = Color(0xFFDE5567);
+  static const Color drink = Color(0xFF57BAC6);
+  static const Color bgDrink = Color(0xFF0273BE);
+
+  static const Color bgBtnFood = Color(0xFFfadeaf);
+  static const Color bgBtnDrink = Color(0xFF0273BE);
+  static const Color bgBtnFun = Color(0xFFf59de3);
+
   static const List<Color> GradientBG = [Color(0xFF110a29), Color(0xFF2f0823)];
   static const List<Color> GradientCard = [
     Color(0xff9e2186),

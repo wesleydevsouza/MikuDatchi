@@ -1,15 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:math';
-
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:water_reminder/commons/button.dart';
-import 'package:water_reminder/components/HorizontalBar.dart';
-import 'package:water_reminder/constants/styling.dart';
-import 'package:water_reminder/functions/DataController.dart';
-import 'package:water_reminder/functions/functions.dart';
-import 'package:water_reminder/screens/status.dart';
+import 'package:miku_datchi/commons/button.dart';
+import 'package:miku_datchi/components/HorizontalBar.dart';
+import 'package:miku_datchi/constants/styling.dart';
+import 'package:miku_datchi/functions/DataController.dart';
+import 'package:miku_datchi/functions/functions.dart';
 import 'package:timer_builder/timer_builder.dart';
 
 class Lobby extends StatefulWidget {
@@ -18,15 +17,9 @@ class Lobby extends StatefulWidget {
 }
 
 class _LobbyState extends State<Lobby> {
-  DataController dataController = DataController();
-
   @override
   void initState() {
     super.initState();
-  }
-
-  void _StatusScreen() async {
-    Navigator.pushNamed(context, '/status');
   }
 
   @override
@@ -36,18 +29,22 @@ class _LobbyState extends State<Lobby> {
       body: TimerBuilder.periodic(
         Duration(seconds: 1),
         builder: (context) {
-          int seconds = DateTime.now().second;
-          if (seconds == 0) {
-            Functions func = Functions(dataController);
-            int randomSeconds = func.getRandomSeconds();
+          Functions func = Functions();
+          int randomSeconds = func.getRandomSeconds();
 
-            // dataController.DecrementSts(randomSts);
-            print("Próxima atualização em $randomSeconds segundos");
-            Future.delayed(
-                Duration(seconds: randomSeconds),
-                () => setState(() {
-                      func.getRandomStatus();
-                    }));
+          final restartableTimer = RestartableTimer(
+            Duration(seconds: randomSeconds),
+            () {
+              print("Próxima atualização em $randomSeconds segundos");
+              Future.delayed(
+                  Duration(seconds: randomSeconds),
+                  () => setState(() {
+                        func.getRandomStatus();
+                      }));
+            },
+          );
+          if (randomSeconds == 0) {
+            restartableTimer.reset();
           }
 
           return SafeArea(
@@ -70,7 +67,7 @@ class _LobbyState extends State<Lobby> {
                         height: 60,
                         child: InkWell(
                           onTap: () {
-                            print("funfou");
+                            Navigator.pushNamed(context, '/status');
                           }, //hides the player view
                           child: Container(
                             padding: const EdgeInsets.all(10.0),
@@ -103,9 +100,7 @@ class _LobbyState extends State<Lobby> {
                         width: 60,
                         height: 60,
                         child: InkWell(
-                          onTap: () {
-                            _StatusScreen;
-                          },
+                          onTap: () {},
                           child: Container(
                             padding: const EdgeInsets.all(10.0),
                             decoration:
@@ -146,68 +141,72 @@ class _LobbyState extends State<Lobby> {
                   Column(
                     children: [
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           AddazButton(
                               onPress: () {
                                 setState(() {
-                                  dataController.food =
-                                      dataController.IncrementSts(
-                                          dataController.food);
+                                  DataController.dataController.food =
+                                      DataController.dataController
+                                          .IncrementSts(DataController
+                                              .dataController.food);
                                 });
                               },
                               icone: Icons.fastfood,
                               tamanho: 60,
-                              cor: Colors.blueAccent),
+                              bgCor: AppTheme.bgfome,
+                              cor: AppTheme.fome),
                           AddazButton(
                               onPress: () {
                                 setState(() {
-                                  dataController.drink =
-                                      dataController.IncrementSts(
-                                          dataController.drink);
+                                  DataController.dataController.drink =
+                                      DataController.dataController
+                                          .IncrementSts(DataController
+                                              .dataController.drink);
                                 });
                               },
                               icone: Icons.emoji_food_beverage,
                               tamanho: 60,
-                              cor: Colors.blueAccent),
+                              bgCor: AppTheme.bgDrink,
+                              cor: AppTheme.drink),
                           AddazButton(
                               onPress: () {
                                 setState(() {
-                                  dataController.fun =
-                                      dataController.IncrementSts(
-                                          dataController.fun);
+                                  DataController.dataController.fun =
+                                      DataController
+                                          .dataController
+                                          .IncrementSts(DataController
+                                              .dataController.fun);
                                 });
                               },
                               icone: Icons.mic,
                               tamanho: 60,
-                              cor: Colors.blueAccent),
+                              bgCor: AppTheme.bgBtnFun,
+                              cor: AppTheme.corCirculo),
                           SizedBox(
                             height: 40,
                           ),
                           SizedBox(height: 20),
                         ],
                       ),
-                      Text('Food: ${dataController.food}'),
-                      // FAProgressBar(
-                      //   currentValue: dataController.food * 10,
-                      //   displayText: '%',
+                      // Text('Food: ${DataController.dataController.food}'),
+                      // HorizontalBar(
+                      //   value: DataController.dataController.food,
+                      //   cor: AppTheme.corCirculo,
+                      //   corBG: AppTheme.corProgresso,
                       // ),
-                      HorizontalBar(
-                        value: dataController.food,
-                        cor: AppTheme.corCirculo,
-                        corBG: AppTheme.corProgresso,
-                      ),
-                      HorizontalBar(
-                        value: dataController.drink,
-                        cor: AppTheme.corCirculo,
-                        corBG: AppTheme.corProgresso,
-                      ),
-                      HorizontalBar(
-                        value: dataController.fun,
-                        cor: AppTheme.corCirculo,
-                        corBG: AppTheme.corProgresso,
-                      ),
-                      // Text('Drink: ${dataController.drink}'),
-                      // Text('Fun: ${dataController.fun}'),
+                      // HorizontalBar(
+                      //   value: DataController.dataController.drink,
+                      //   cor: AppTheme.corCirculo,
+                      //   corBG: AppTheme.corProgresso,
+                      // ),
+                      // HorizontalBar(
+                      //   value: DataController.dataController.fun,
+                      //   cor: AppTheme.corCirculo,
+                      //   corBG: AppTheme.corProgresso,
+                      // ),
+                      // // Text('Drink: ${dataController.drink}'),
+                      // // Text('Fun: ${dataController.fun}'),
                     ],
                   )
                 ],

@@ -1,4 +1,4 @@
-name: water_reminder
+name: miku_datchi
 description: A reminder to drink water with local notifications
 
 # The following line prevents the package from being accidentally published to
@@ -37,6 +37,7 @@ dependencies:
   google_fonts: ^4.0.3
   flutter_animation_progress_bar: ^2.3.1
   timer_builder: ^2.0.0 
+  async: 
 
 flutter_icons:
   image_path: "images/miku.png"
