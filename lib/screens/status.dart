@@ -135,24 +135,6 @@ class _StatusScreenState extends State<StatusScreen> {
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-                SizedBox(
-                  width: 60,
-                  height: 60,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(10.0),
-                      decoration: const BoxDecoration(shape: BoxShape.circle),
-                      child: const Icon(
-                        Icons.gamepad,
-                        color: AppTheme.corCirculo,
-                        size: 40,
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
           );
