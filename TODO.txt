@@ -1,0 +1,6 @@
+TO DO:
+
+-Trigger de Game Over quando uma das barras chegar a 0
+-Alerta na tela avisando que uma das barras está baixa
+-Adicionar a função de dormir
+-Adicionar animações nos botões
