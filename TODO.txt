@@ -4,3 +4,4 @@ TO DO:
 -Alerta na tela avisando que uma das barras está baixa
 -Adicionar a função de dormir
 -Adicionar animações nos botões
+-Adicionar responsividade ao projeto
