@@ -1,11 +1,10 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'dart:math';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:miku_datchi/commons/button.dart';
 import 'package:miku_datchi/components/HorizontalBar.dart';
+import 'package:miku_datchi/components/button.dart';
 import 'package:miku_datchi/constants/styling.dart';
 import 'package:miku_datchi/functions/DataController.dart';
 import 'package:miku_datchi/functions/functions.dart';
@@ -37,14 +36,88 @@ class _LobbyState extends State<Lobby> {
             () {
               print("Próxima atualização em $randomSeconds segundos");
               Future.delayed(
-                  Duration(seconds: randomSeconds),
-                  () => setState(() {
-                        func.getRandomStatus();
-                      }));
+                Duration(seconds: randomSeconds),
+                () => setState(
+                  () {
+                    func.getRandomStatus();
+                  },
+                ),
+              );
             },
           );
           if (randomSeconds == 0) {
             restartableTimer.reset();
+          }
+
+          final verifyTimer = RestartableTimer(
+            Duration(seconds: 1),
+            () {
+              if (DataController.dataController.food == 4) {
+                switch (DataController.dataController.controleFood) {
+                  case 1:
+                    _showPopup(
+                      context,
+                      DataController.dataController.food,
+                      'Miku está ficando com fome.',
+                    );
+                    DataController.dataController.controleFood = 2;
+                    print("Dialog será exibido");
+
+                    break;
+
+                  case 2:
+                    print("Dialog ja foi exibido");
+                    break;
+
+                  default:
+                }
+              }
+
+              if (DataController.dataController.drink == 4) {
+                switch (DataController.dataController.controleDrink) {
+                  case 1:
+                    _showPopup(
+                      context,
+                      DataController.dataController.drink,
+                      'Miku está ficando com sede.',
+                    );
+                    DataController.dataController.controleDrink = 2;
+                    print("Dialog será exibido");
+
+                    break;
+
+                  case 2:
+                    print("Dialog ja foi exibido");
+                    break;
+
+                  default:
+                }
+              }
+
+              if (DataController.dataController.fun == 4) {
+                switch (DataController.dataController.controleFun) {
+                  case 1:
+                    _showPopup(
+                      context,
+                      DataController.dataController.fun,
+                      'Miku está ficando entediada.',
+                    );
+                    DataController.dataController.controleFun = 2;
+                    print("Dialog será exibido");
+
+                    break;
+
+                  case 2:
+                    print("Dialog ja foi exibido");
+                    break;
+
+                  default:
+                }
+              }
+            },
+          );
+          if (randomSeconds == 0) {
+            verifyTimer.reset();
           }
 
           return SafeArea(
@@ -146,6 +219,8 @@ class _LobbyState extends State<Lobby> {
                           AddazButton(
                               onPress: () {
                                 setState(() {
+                                  DataController.dataController.controleFood =
+                                      1;
                                   DataController.dataController.food =
                                       DataController.dataController
                                           .IncrementSts(DataController
@@ -159,6 +234,8 @@ class _LobbyState extends State<Lobby> {
                           AddazButton(
                               onPress: () {
                                 setState(() {
+                                  DataController.dataController.controleDrink =
+                                      1;
                                   DataController.dataController.drink =
                                       DataController.dataController
                                           .IncrementSts(DataController
@@ -172,6 +249,7 @@ class _LobbyState extends State<Lobby> {
                           AddazButton(
                               onPress: () {
                                 setState(() {
+                                  DataController.dataController.controleFun = 1;
                                   DataController.dataController.fun =
                                       DataController
                                           .dataController
@@ -189,12 +267,25 @@ class _LobbyState extends State<Lobby> {
                           SizedBox(height: 20),
                         ],
                       ),
-                      // Text('Food: ${DataController.dataController.food}'),
-                      // HorizontalBar(
-                      //   value: DataController.dataController.food,
-                      //   cor: AppTheme.corCirculo,
-                      //   corBG: AppTheme.corProgresso,
-                      // ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          // final result = await FlutterRestart.restartApp();
+                        },
+                        child: Text(
+                          'Reiniciar',
+                          style: GoogleFonts.roboto(
+                              fontSize: 25,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Text(
+                          'Felicidade: ${DataController.dataController.happy}'),
+                      HorizontalBar(
+                        value: DataController.dataController.happy,
+                        cor: AppTheme.corCirculo,
+                        corBG: AppTheme.corProgresso,
+                      ),
                       // HorizontalBar(
                       //   value: DataController.dataController.drink,
                       //   cor: AppTheme.corCirculo,
@@ -218,11 +309,53 @@ class _LobbyState extends State<Lobby> {
     );
   }
 
-  int value = 100;
-  int minDecayValue = 1;
-
-  int getRandomSeconds() {
-    Random random = Random();
-    return random.nextInt(31) + 30;
+  void _showPopup(BuildContext context, int atr, String msg) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: RichText(
+            text: TextSpan(
+              style: GoogleFonts.roboto(
+                fontSize: 20,
+                color: Colors.black,
+              ),
+              children: <TextSpan>[
+                TextSpan(
+                  text: 'Aviso',
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          content: RichText(
+            textAlign: TextAlign.left,
+            textDirection: TextDirection.ltr,
+            text: TextSpan(
+              style: GoogleFonts.roboto(
+                fontSize: 20,
+                color: Colors.black,
+              ),
+              children: <TextSpan>[
+                TextSpan(
+                  text: msg,
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text('Fechar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

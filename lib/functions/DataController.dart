@@ -1,7 +1,12 @@
 class DataController {
-  int drink = 5;
-  int food = 6;
-  int fun = 7;
+  int drink = 10;
+  int food = 10;
+  int fun = 10;
+  int happy = 1;
+
+  int controleFood = 1;
+  int controleDrink = 1;
+  int controleFun = 1;
 
   static final DataController _dataController =
       DataController._construtorPrivado();
