@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:async';
+
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,6 +11,7 @@ import 'package:miku_datchi/constants/styling.dart';
 import 'package:miku_datchi/functions/DataController.dart';
 import 'package:miku_datchi/functions/functions.dart';
 import 'package:timer_builder/timer_builder.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class Lobby extends StatefulWidget {
   @override
@@ -29,9 +32,10 @@ class _LobbyState extends State<Lobby> {
         Duration(seconds: 1),
         builder: (context) {
           Functions func = Functions();
+          int secs = 5;
           int randomSeconds = func.getRandomSeconds();
 
-          final restartableTimer = RestartableTimer(
+          final decreaseStatusTimer = RestartableTimer(
             Duration(seconds: randomSeconds),
             () {
               print("Próxima atualização em $randomSeconds segundos");
@@ -46,8 +50,15 @@ class _LobbyState extends State<Lobby> {
             },
           );
           if (randomSeconds == 0) {
-            restartableTimer.reset();
+            decreaseStatusTimer.reset();
           }
+
+          Timer mytimer = Timer.periodic(Duration(seconds: 10), (timer) {
+            setState(() {
+              print("Happy Done");
+              func.decreaseHappiness();
+            });
+          });
 
           final verifyTimer = RestartableTimer(
             Duration(seconds: 1),
@@ -55,11 +66,27 @@ class _LobbyState extends State<Lobby> {
               if (DataController.dataController.food == 4) {
                 switch (DataController.dataController.controleFood) {
                   case 1:
-                    _showPopup(
-                      context,
-                      DataController.dataController.food,
-                      'Miku está ficando com fome.',
+                    final snackBar = SnackBar(
+                      elevation: 0,
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: Colors.transparent,
+                      content: AwesomeSnackbarContent(
+                        title: 'Atenção Atenção!',
+                        message: 'Obrigado pela atenção!',
+
+                        /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+                        contentType: ContentType.failure,
+                      ),
                     );
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(snackBar);
+
+                    // _showPopup(
+                    //   context,
+                    //   DataController.dataController.food,
+                    //   'Miku está ficando com fome.',
+                    // );
                     DataController.dataController.controleFood = 2;
                     print("Dialog será exibido");
 
@@ -219,6 +246,7 @@ class _LobbyState extends State<Lobby> {
                           AddazButton(
                               onPress: () {
                                 setState(() {
+                                  func.indecreaseHappiness();
                                   DataController.dataController.controleFood =
                                       1;
                                   DataController.dataController.food =
@@ -234,6 +262,7 @@ class _LobbyState extends State<Lobby> {
                           AddazButton(
                               onPress: () {
                                 setState(() {
+                                  func.indecreaseHappiness();
                                   DataController.dataController.controleDrink =
                                       1;
                                   DataController.dataController.drink =
@@ -249,6 +278,7 @@ class _LobbyState extends State<Lobby> {
                           AddazButton(
                               onPress: () {
                                 setState(() {
+                                  func.indecreaseHappiness();
                                   DataController.dataController.controleFun = 1;
                                   DataController.dataController.fun =
                                       DataController
@@ -268,16 +298,33 @@ class _LobbyState extends State<Lobby> {
                         ],
                       ),
                       ElevatedButton(
-                        onPressed: () async {
-                          // final result = await FlutterRestart.restartApp();
+                        onPressed: () {
+                          AwesomeSnackbarContent(
+                              title: "SaaS",
+                              message: "Wood está SaaS",
+                              contentType: ContentType.failure);
                         },
-                        child: Text(
-                          'Reiniciar',
-                          style: GoogleFonts.roboto(
-                              fontSize: 25,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
+                        child: const Text('Carai'),
+                      ),
+                      ElevatedButton(
+                        child: const Text('Teste'),
+                        onPressed: () {
+                          final snackBar = SnackBar(
+                            elevation: 0,
+                            behavior: SnackBarBehavior.floating,
+                            backgroundColor: Colors.transparent,
+                            content: AwesomeSnackbarContent(
+                              title: 'Atenção Atenção!',
+                              message: 'Meu pau ta durão!',
+
+                              /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+                              contentType: ContentType.failure,
+                            ),
+                          );
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(snackBar);
+                        },
                       ),
                       Text(
                           'Felicidade: ${DataController.dataController.happy}'),
@@ -292,6 +339,7 @@ class _LobbyState extends State<Lobby> {
                       //   corBG: AppTheme.corProgresso,
                       // ),
                       // HorizontalBar(
+
                       //   value: DataController.dataController.fun,
                       //   cor: AppTheme.corCirculo,
                       //   corBG: AppTheme.corProgresso,
@@ -309,7 +357,7 @@ class _LobbyState extends State<Lobby> {
     );
   }
 
-  void _showPopup(BuildContext context, int atr, String msg) {
+  void _showPopup(BuildContext context, double atr, String msg) {
     showDialog(
       context: context,
       builder: (BuildContext context) {

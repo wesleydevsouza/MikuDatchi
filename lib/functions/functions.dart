@@ -10,6 +10,11 @@ class Functions {
     return random.nextInt(30);
   }
 
+  int getRandomSecondsHappy() {
+    Random random = Random();
+    return random.nextInt(90);
+  }
+
   void decayValue(atributo) {
     if (atributo > 1) {
       --atributo;
@@ -41,6 +46,26 @@ class Functions {
 
       default:
         return;
+    }
+  }
+
+  void decreaseHappiness() {
+    if (DataController.dataController.happy > 1) {
+      if (DataController.dataController.happy < 4 ||
+          DataController.dataController.drink < 4 ||
+          DataController.dataController.fun < 4) {
+        DataController.dataController.happy =
+            DataController.dataController.happy - 1;
+      }
+    }
+  }
+
+  void indecreaseHappiness() {
+    if (DataController.dataController.happy < 10 ||
+        DataController.dataController.drink < 10 ||
+        DataController.dataController.fun < 10) {
+      DataController.dataController.happy =
+          DataController.dataController.happy + 0.5;
     }
   }
 }

@@ -1,8 +1,8 @@
 class DataController {
-  int drink = 10;
-  int food = 10;
-  int fun = 10;
-  int happy = 1;
+  double drink = 10;
+  double food = 10;
+  double fun = 10;
+  double happy = 1;
 
   int controleFood = 1;
   int controleDrink = 1;
@@ -15,7 +15,7 @@ class DataController {
 
   static DataController get dataController => _dataController;
 
-  int IncrementSts(int atributo) {
+  double IncrementSts(double atributo) {
     if (atributo < 10) {
       return ++atributo;
     } else {
@@ -23,7 +23,7 @@ class DataController {
     }
   }
 
-  int DecrementSts(int atributo) {
+  double DecrementSts(double atributo) {
     return --atributo;
   }
 }
